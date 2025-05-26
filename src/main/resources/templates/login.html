@@ -1,40 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" 
-th:replace="~{fragments/layouttemplate :: layout (~{::body})}"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
->
-    <head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layouttemplate :: layout (~{::body})}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
     <meta charset="UTF-8"/>
-    <title>replace</title>
+    <title>Login</title>
 </head>
 <body>
+<div class="section">
+    <div class="container">
+        <div class="mx-auto">
+            <h2>Log in</h2>
 
-    <div class="section">
-        <!-- container -->
-        <div class="container">
-            <div class="mx-auto">
-                <h2>Log in</h2>
+            <!-- Error/Logout Messages -->
+            <div class="text--center" th:if="${param.error}">Invalid username and password.</div>
+            <div class="text--center" th:if="${param.logout}">You have been logged out.</div>
+            <p th:if="${error}" class="error">UserName & Password Incorrect</p>
+
+            <!-- Login Form -->
             <form th:action="@{/login}" th:object="${loginForm}" method="post">
-              <div class="text--center" th:if="${param.error}"> Invalid username and password. </div> <div class="text--center" th:if="${param.logout}"> You have been logged out. </div>                
-                <p th:if="${error}" class="error">UserName & Password Incorrect</p>
-                        <div class="form-group">
-                            <label for="username">Email address</label>
-                          <input class="form-control" required type="email" name="username">
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Lösenord</label>
-                          <input class="form-control" required type="password" name="password">
-                        </div>
-                          <button type="submit" class="btn btn-primary">
-                            Login
-                            </button>
-                      </form>
-                    </div>
+                <div class="form-group">
+                    <label for="username">Email address</label>
+                    <input class="form-control" required type="email" name="username" id="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Lösenord</label>
+                    <input class="form-control" required type="password" name="password" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+
+            <!-- OAuth2 GitHub Login Button -->
+            <div class="oauth-button text-center mt-3">
+                <a class="btn btn-github w-100" th:href="@{/oauth2/authorization/github}"
+                   style="background-color: #1b1e21; color: white; display: inline-block; padding: 10px; text-decoration: none; text-align: center;">
+                    Login with GitHub
+                </a>
+            </div>
+
         </div>
-        <!-- /container -->
     </div>
-
-
-
+</div>
 </body>
 </html>

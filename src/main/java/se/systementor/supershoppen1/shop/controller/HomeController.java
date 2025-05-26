@@ -16,38 +16,48 @@ import se.systementor.supershoppen1.shop.services.SubscriberService;
 
 @Controller
 public class HomeController {
-    private  ProductService productService;
-    private SubscriberService subscriberService;
+
+    private final ProductService productService;
+    private final SubscriberService subscriberService;
+
     @Autowired
     public HomeController(ProductService productService, SubscriberService subscriberService) {
         this.productService = productService;
         this.subscriberService = subscriberService;
-    }    
+    }
 
-    @GetMapping(path="/")
-    String empty(Model model)
-    {
+    /**
+     * Startsida – laddas vid "/"
+     * Visar om användaren är prenumerant (för att dölja/förhindra ny prenumeration)
+     */
+    @GetMapping("/")
+    public String showHome(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object ud = auth.getPrincipal();
-        if(ud instanceof UserDetails)
-        {
-            String user = ((UserDetails)ud).getUsername();
-            var va2 = subscriberService.isSubscriber(user);
-            model.addAttribute("hideSubscription", va2);
-        }
-        else{
-            model.addAttribute("hideSubscription", false);
 
+        if (ud instanceof UserDetails) {
+            String username = ((UserDetails) ud).getUsername();
+            boolean isSubscriber = subscriberService.isSubscriber(username);
+            model.addAttribute("hideSubscription", isSubscriber);
+        } else {
+            model.addAttribute("hideSubscription", false);
         }
-        
 
         return "home";
     }
-
-    @GetMapping(path="/test2")
-    List<Product> getAll(){
-        return productService.getAll();
+    /**
+     * Integritetspolicysida – visas vid "/privacy"
+     */
+    @GetMapping("/privacy")
+    public String showPrivacyPolicy() {
+        return "privacy";
     }
 
-
+    /**
+     * Testmetod för att returnera alla produkter (JSON)
+     */
+    @GetMapping("/test2")
+    public List<Product> getAllProducts() {
+        return productService.getAll();
+    }
 }
