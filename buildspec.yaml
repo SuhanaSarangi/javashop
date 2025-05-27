@@ -6,7 +6,7 @@ phases:
   build:
     commands:
       - echo Build completed on `date`
-      - mvn package -Dmaven.test.skip
+      - mvn package #-Dmaven.test.skip
       - dir target
   post_build:
     commands:
@@ -15,3 +15,4 @@ artifacts:
   files:
     - target/*.jar
   discard-paths: yes
+
